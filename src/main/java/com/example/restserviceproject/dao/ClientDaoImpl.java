@@ -20,9 +20,12 @@ import java.util.Map;
 
 @Repository
 public class ClientDaoImpl implements ClientDao {
-    @Autowired
+    //@Autowired
     private NamedParameterJdbcTemplate template;
 
+    public ClientDaoImpl(@Autowired NamedParameterJdbcTemplate template) {
+        this.template=template;
+    }
 
     @Override
     public List<Client> findAll() {

@@ -1,11 +1,13 @@
 package com.example.restserviceproject.controller;
 
 import com.example.restserviceproject.entity.Client;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.QueryTimeoutException;
 import org.springframework.web.bind.annotation.*;
 import com.example.restserviceproject.service.ClientService;
 
 import javax.annotation.Resource;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -14,8 +16,11 @@ import java.util.List;
 @RequestMapping("/clients")
 public class Controller {
 
-    @Resource
+    //@Resource
     private ClientService clientService;
+    public Controller(@Autowired ClientService service){
+        this.clientService = service;
+    }
 
     @GetMapping("/get")
     public List<Client> getClients(){

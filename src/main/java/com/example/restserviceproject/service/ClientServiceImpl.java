@@ -2,14 +2,18 @@ package com.example.restserviceproject.service;
 
 import com.example.restserviceproject.dao.ClientDao;
 import com.example.restserviceproject.entity.Client;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
 @Service
 public class ClientServiceImpl implements ClientService {
-    @Resource
+    //@Resource
     ClientDao clientDao;
+    public ClientServiceImpl(@Autowired ClientDao clientDao){
+        this.clientDao = clientDao;
+    }
     @Override
     public List<Client> findAll() {
         return clientDao.findAll();
