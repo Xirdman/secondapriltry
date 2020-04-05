@@ -1,11 +1,12 @@
-package service;
+package com.example.restserviceproject.service;
 
-import dao.ClientDao;
-import entity.Client;
+import com.example.restserviceproject.dao.ClientDao;
+import com.example.restserviceproject.entity.Client;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-
+@Service
 public class ClientServiceImpl implements ClientService {
     @Resource
     ClientDao clientDao;

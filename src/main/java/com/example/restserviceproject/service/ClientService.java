@@ -1,9 +1,10 @@
-package dao;
+package com.example.restserviceproject.service;
 
-import entity.Client;
+import com.example.restserviceproject.entity.Client;
+
 import java.util.List;
 
-public interface ClientDao {
+public interface ClientService {
     List<Client> findAll();
     void insertClient(Client client);
     void updateClient(Client client);
