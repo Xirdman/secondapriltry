@@ -55,4 +55,5 @@ public class Client {
     public void setSurName(String surName) {
         this.surName = surName;
     }
+
 }
