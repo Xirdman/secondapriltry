@@ -1,6 +1,6 @@
-package dao;
+package com.example.restserviceproject.dao;
 
-import entity.Transfer;
+import com.example.restserviceproject.entity.Transfer;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package dao;
+package com.example.restserviceproject.dao;
 
-import entity.BankAccount;
+import com.example.restserviceproject.entity.BankAccount;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
