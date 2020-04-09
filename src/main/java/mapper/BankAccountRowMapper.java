@@ -1,8 +1,9 @@
-package com.example.restserviceproject.mapper;
+package mapper;
 
-import com.example.restserviceproject.entity.BankAccount;
+import entity.BankAccount;
 import org.springframework.jdbc.core.RowMapper;
 
+import javax.swing.tree.TreePath;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 

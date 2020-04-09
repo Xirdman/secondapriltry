@@ -25,8 +25,7 @@ INSERT INTO clients (lastname,firstname,surname) VALUES
         ('Геворкян','Ашот','Финикович'),
         ('Jhon','Smith','FromMatrix'),
         ('Распутин','Дмитрий','Медьведьевич'),
-        ('Матвеев','Лесник','Забугорьевич'),
-        ('Человек','Которого','Всегда удаляют'
+        ('Матвеев','Лесник','Забугорьевич'
 );
 INSERT INTO bankaccounts (ownerid, balance,accountnumber) VALUES
         (1, 777.00,'4276540031405789'),

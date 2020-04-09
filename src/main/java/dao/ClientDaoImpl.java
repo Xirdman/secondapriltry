@@ -1,8 +1,7 @@
-package com.example.restserviceproject.dao;
+package dao;
 
-import com.example.restserviceproject.mapper.ClientRowMapper;
-import com.example.restserviceproject.entity.Client;
-import org.springframework.beans.factory.annotation.Autowired;
+import entity.Client;
+import mapper.ClientRowMapper;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,12 +19,7 @@ import java.util.Map;
 
 @Repository
 public class ClientDaoImpl implements ClientDao {
-    //@Autowired
-    private NamedParameterJdbcTemplate template;
-
-    public ClientDaoImpl(@Autowired NamedParameterJdbcTemplate template) {
-        this.template=template;
-    }
+    NamedParameterJdbcTemplate template;
 
     @Override
     public List<Client> findAll() {

@@ -1,6 +1,6 @@
-package com.example.restserviceproject.dao;
+package dao;
 
-import com.example.restserviceproject.entity.BankAccount;
+import entity.BankAccount;
 
 import java.util.List;
 

@@ -1,8 +1,5 @@
-package com.example.restserviceproject.entity;
+package entity;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Client {
     private int id;
     private String firstName,lastName,surName;
@@ -26,7 +23,6 @@ public class Client {
         this.lastName = lastName;
         this.surName = surName;
     }
-
 
     public void setId(int id) {
         this.id = id;
@@ -55,5 +51,4 @@ public class Client {
     public void setSurName(String surName) {
         this.surName = surName;
     }
-
 }
