@@ -1,14 +1,10 @@
 package com.example.restserviceproject.controller;
 
 import com.example.restserviceproject.entity.Client;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.QueryTimeoutException;
-import org.springframework.web.bind.annotation.*;
 import com.example.restserviceproject.service.ClientService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -18,42 +14,43 @@ public class Controller {
 
     //@Resource
     private ClientService clientService;
-    public Controller(@Autowired ClientService service){
+
+    public Controller(@Autowired ClientService service) {
         this.clientService = service;
     }
 
     @GetMapping("/get")
-    public List<Client> getClients(){
+    public List<Client> getClients() {
         return clientService.findAll();
     }
-    @DeleteMapping("/delete")
-    public String deleteClient(@RequestParam(value = "idOfClient") int idOfClient){
 
-            List<Client> list= clientService.findAll();/*
-            Client client = list.get(idOfClient-1);
-            clientService.deleteClient(client);*/
-            Client client = findWithIterator(idOfClient,list);
-            if (client!=null){
-                clientService.deleteClient(client);
-                return "Клиент с id = "+ idOfClient+ " удален";
-            }
-            return "ничего не получилось";//Тут надо отлавливать ошибку если клиент не может удалиться в БД из-за внешнего ключа?
-
+    @GetMapping("/delete")
+    public void deleteClient(@RequestParam(value = "idOfClient") int idOfClient) {
+        List<Client> list = clientService.findAll();
+        Client client = findWithIterator(idOfClient, list);
+        if (client != null) {
+            clientService.deleteClient(client);
+        }
     }
+
     @PostMapping("/add")
-    public void addClient(@RequestParam(value = "client")Client client){
-        clientService.insertClient(client);
+    public void addClient(@RequestParam(value = "clientId") int clientId,
+                          @RequestParam(value = "clientFName")String fName,
+                          @RequestParam(value = "clientLName")String lName,
+                          @RequestParam(value = "clientSName")String sName) {
+        clientService.insertClient(new Client(clientId,fName,lName,sName));
     }
 
     @PutMapping("/update")
-    public void updateClient(@RequestParam(value = "client")Client client){
+    public void updateClient(@RequestParam(value = "client") Client client) {
         clientService.updateClient(client);
     }
-    public Client findWithIterator(int id,List<Client> list){
-        Iterator<Client> iterator= list.iterator();
-        while (iterator.hasNext()){
+
+    public Client findWithIterator(int id, List<Client> list) {
+        Iterator<Client> iterator = list.iterator();
+        while (iterator.hasNext()) {
             Client clientToCompare = iterator.next();
-            if (clientToCompare.getId()==id){
+            if (clientToCompare.getId() == id) {
                 return clientToCompare;
             }
         }

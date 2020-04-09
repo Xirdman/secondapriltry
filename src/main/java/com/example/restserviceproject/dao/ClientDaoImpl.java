@@ -1,7 +1,7 @@
 package com.example.restserviceproject.dao;
 
-import com.example.restserviceproject.mapper.ClientRowMapper;
 import com.example.restserviceproject.entity.Client;
+import com.example.restserviceproject.mapper.ClientRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -24,8 +24,12 @@ public class ClientDaoImpl implements ClientDao {
     private NamedParameterJdbcTemplate template;
 
     public ClientDaoImpl(@Autowired NamedParameterJdbcTemplate template) {
-        this.template=template;
+        this.template = template;
     }
+
+    /*public Client findById(int id){
+        return null;
+    }*/
 
     @Override
     public List<Client> findAll() {
@@ -36,10 +40,10 @@ public class ClientDaoImpl implements ClientDao {
     public void insertClient(Client client) {
         final String sql = "INSERT INTO clients (id,firstname,lastname,surname) VALUES (:id,:firstname,:lastname,:surname)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        SqlParameterSource param = new MapSqlParameterSource().addValue("id",client.getId())
-                .addValue("firstname",client.getFirstName())
-                .addValue("lastname",client.getLastName()).addValue("surname",client.getSurName());
-        template.update(sql,param,keyHolder);
+        SqlParameterSource param = new MapSqlParameterSource().addValue("id", client.getId())
+                .addValue("firstname", client.getFirstName())
+                .addValue("lastname", client.getLastName()).addValue("surname", client.getSurName());
+        template.update(sql, param, keyHolder);
 
     }
 
@@ -48,37 +52,39 @@ public class ClientDaoImpl implements ClientDao {
         final String sql = "UPDATE clients  SET firstname =:firstname,lastname =: lastname, surname =: surname";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         SqlParameterSource param = new MapSqlParameterSource()
-                .addValue("lastname",client.getLastName()).addValue("firstname",client.getFirstName())
-                .addValue("surname",client.getSurName());
-        template.update(sql,param,keyHolder);
+                .addValue("lastname", client.getLastName()).addValue("firstname", client.getFirstName())
+                .addValue("surname", client.getSurName());
+        template.update(sql, param, keyHolder);
 
     }
 
     @Override
     public void deleteClient(Client client) {
         final String sql = "DELETE FROM clients where id=:id";
-        Map<String,Object> map = new HashMap<String, Object>();
-        map.put("id",client.getId());
-        template.execute(sql, map, new PreparedStatementCallback<Object>(){
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", client.getId());
+
+        PreparedStatementCallback<Object> prep = new PreparedStatementCallback<Object>() {
             @Override
-            public Object doInPreparedStatement(PreparedStatement preparedStatement)throws SQLException, DataAccessException {
-                return  preparedStatement.executeUpdate();
+            public Object doInPreparedStatement(PreparedStatement preparedStatement) throws SQLException, DataAccessException {
+                return preparedStatement.executeUpdate() > 0;
             }
-        });
+        };
+        template.execute(sql, map, prep);
 
     }
 
     @Override
     public void executeUpdateClient(Client client) {
         final String sql = "UPDATE clients SET firstname=:firstname, lastname:=lastname, surname:=surname WHERE id =:id";
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("id",client.getId());
-        map.put("firstname",client.getFirstName());
-        map.put("lastname",client.getLastName());
-        map.put("surname",client.getSurName());
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", client.getId());
+        map.put("firstname", client.getFirstName());
+        map.put("lastname", client.getLastName());
+        map.put("surname", client.getSurName());
         template.execute(sql, map, new PreparedStatementCallback<Object>() {
             @Override
-            public Object doInPreparedStatement(PreparedStatement preparedStatement) throws SQLException,DataAccessException{
+            public Object doInPreparedStatement(PreparedStatement preparedStatement) throws SQLException, DataAccessException {
                 return preparedStatement.executeUpdate();
             }
         });

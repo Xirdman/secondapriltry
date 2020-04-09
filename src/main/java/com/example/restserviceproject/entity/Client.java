@@ -1,11 +1,14 @@
 package com.example.restserviceproject.entity;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.stereotype.Component;
 
 @Component
+@JsonIgnoreProperties({"id"})
 public class Client {
     private int id;
-    private String firstName,lastName,surName;
+    private String firstName, lastName, surName;
 
     public int getId() {
         return id;
@@ -32,6 +35,7 @@ public class Client {
         this.id = id;
     }
 
+    @JsonGetter("Имя")
     public String getFirstName() {
         return firstName;
     }
@@ -40,6 +44,7 @@ public class Client {
         this.firstName = firstName;
     }
 
+    @JsonGetter("Фамилия")
     public String getLastName() {
         return lastName;
     }
@@ -48,6 +53,7 @@ public class Client {
         this.lastName = lastName;
     }
 
+    @JsonGetter("Отчество")
     public String getSurName() {
         return surName;
     }

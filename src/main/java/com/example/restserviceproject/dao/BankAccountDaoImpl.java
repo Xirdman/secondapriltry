@@ -5,8 +5,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import java.util.List;
 
-public class BankAccountDaoImpl implements BankAccountDao{
+public class BankAccountDaoImpl implements BankAccountDao {
     NamedParameterJdbcTemplate template;
+
     @Override
     public List<BankAccount> findAll() {
         return null;
