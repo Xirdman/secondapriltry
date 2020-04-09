@@ -2,9 +2,7 @@ package com.example.restserviceproject.entity;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.stereotype.Component;
 
-@Component
 @JsonIgnoreProperties({"id"})
 public class Client {
     private int id;
