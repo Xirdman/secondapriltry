@@ -42,10 +42,10 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Boolean deleteClient(Client client) {
+    public Boolean deleteClient(int id) {
         final String sql = "DELETE FROM clients where id=:id";
         Map<String, Object> map = new HashMap<String, Object>();
-        map.put("id", client.getId());
+        map.put("id", id);
         return template.execute(sql, map, preparedStatement -> preparedStatement.executeUpdate() > 0);
     }
 
@@ -63,6 +63,14 @@ public class ClientDaoImpl implements ClientDao {
         map.put("surname", client.getSurName());
         return template.execute(sql, map, preparedStatement -> preparedStatement.executeUpdate() > 0);
 
+    }
+
+    @Override
+    public Client findById(int id) {
+        final String sql = "SELECT * FROM clients WHERE id=:id";
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("id", id);
+        return template.queryForObject(sql, map, new ClientRowMapper());
     }
 
 }

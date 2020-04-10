@@ -24,15 +24,13 @@ public class ClientController {
     }
 
     @GetMapping("/delete")
-    public String deleteClient(@RequestParam(value = "idOfClient") int idOfClient) {
-        List<Client> list = clientService.findAll();
-        Client client = findWithIterator(idOfClient, list);
-        if (client != null) {
-            if (clientService.deleteClient(client)) {
-                return "Клиент удален";
-            }
+    public String deleteClient(@RequestParam(value = "clientId") int clientId) {
+        if (clientService.deleteClient(clientId)) {
+
+            return "Клиент с id " + clientId + " удален";
         }
-        return "Клиент с id " + idOfClient + " не может быть удален";
+
+        return "Клиент не может быть удален";
     }
 
     @GetMapping("/add")
@@ -47,15 +45,7 @@ public class ClientController {
                                @RequestParam(value = "clientFName") String fName,
                                @RequestParam(value = "clientLName") String lName,
                                @RequestParam(value = "clientSName") String sName) {
-        List<Client> list = clientService.findAll();
-        Client client = findWithIterator(id, list);
-        if (client != null) {
-            client.setFirstName(fName);
-            client.setLastName(lName);
-            client.setSurName(sName);
-            clientService.updateClient(client);
-            return "Клиент с " + id + " обновлен";
-        }
+        clientService.updateClient(new Client(id,fName,lName,sName));
         return "Клиент с " + id + " не может быть обновлен";
 
     }
