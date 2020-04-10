@@ -7,13 +7,11 @@ import java.util.List;
 public interface ClientDao {
     List<Client> findAll();
 
-    void insertClient(Client client);
+    Boolean insertClient(String fName, String lName, String sName);
 
-    void updateClient(Client client);
+    Boolean updateClient(Client client);
 
-    void deleteClient(Client client);
+    Boolean deleteClient(Client client);
 
-    void executeUpdateClient(Client client);
 
-    //Client findById(int id);
 }

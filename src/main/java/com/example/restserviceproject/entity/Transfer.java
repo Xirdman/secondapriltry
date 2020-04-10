@@ -1,10 +1,7 @@
 package com.example.restserviceproject.entity;
 
-import org.springframework.stereotype.Component;
-
 import java.util.Date;
 
-@Component
 public class Transfer {
     private int id, accountIdFrom, accountIdTo;
     private double value;
