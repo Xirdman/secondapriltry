@@ -1,12 +1,15 @@
 package com.example.restserviceproject.controller;
 
 import com.example.restserviceproject.entity.Client;
+import com.example.restserviceproject.entity.ClientDto;
 import com.example.restserviceproject.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/clients")
@@ -23,42 +26,34 @@ public class ClientController {
         return clientService.findAll();
     }
 
-    @GetMapping("/delete")
-    public String deleteClient(@RequestParam(value = "clientId") int clientId) {
-        if (clientService.deleteClient(clientId)) {
+    @DeleteMapping("/delete/{clientId}")
+    public void deleteClient(@PathVariable int clientId) {
+        if (!clientService.deleteClient(clientId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Client didnt finded");
+        }
+    }
 
-            return "Клиент с id " + clientId + " удален";
+    @PutMapping("/add")
+    public void addClient(@RequestParam(value = "client") Client client) {
+        clientService.insertClient(client.getFirstName(), client.getLastName(), client.getSurName());
+    }
+
+    @PutMapping("/update")
+    public void updateClient(@RequestParam(value = "clientDto") ClientDto clientDto){
+        if( !clientService.updateClient(clientDto.getId(),clientDto.getFirstName(),clientDto.getLastName(),clientDto.getSurName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Клиент не найден");
+        }
+    }
+
+    @GetMapping ("/get/{id}")
+    public Client getById(@PathVariable int id){
+        Optional<Client> clientOptional = clientService.findById(id);
+        if(clientOptional.isPresent()){
+            return clientOptional.get();
+        }
+        else{
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Client dont find");
         }
 
-        return "Клиент не может быть удален";
     }
-
-    @GetMapping("/add")
-    public void addClient(@RequestParam(value = "clientFName") String fName,
-                          @RequestParam(value = "clientLName") String lName,
-                          @RequestParam(value = "clientSName") String sName) {
-        clientService.insertClient(fName, lName, sName);
-    }
-
-    @GetMapping("/update")
-    public String updateClient(@RequestParam(value = "id") int id,
-                               @RequestParam(value = "clientFName") String fName,
-                               @RequestParam(value = "clientLName") String lName,
-                               @RequestParam(value = "clientSName") String sName) {
-        clientService.updateClient(new Client(id,fName,lName,sName));
-        return "Клиент с " + id + " не может быть обновлен";
-
-    }
-
-    public Client findWithIterator(int id, List<Client> list) {
-        Iterator<Client> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Client clientToCompare = iterator.next();
-            if (clientToCompare.getId() == id) {
-                return clientToCompare;
-            }
-        }
-        return null;
-    }
-
 }

@@ -17,15 +17,11 @@ public class ClientDaoImplTest {
 
     @Autowired
     NamedParameterJdbcTemplate template;
+    @Autowired
     ClientDaoImpl testDao;
 
     @Test
     void addClientTest() {
-        testDao = new ClientDaoImpl(template);
-        Client addedClient = new Client("Тестовый клиент", "Фамилия", "Имя");
-        assertThat(testDao.insertClient(addedClient.getFirstName(),
-                addedClient.getLastName(),
-                addedClient.getSurName())).isTrue();
     }
 
     @Test
@@ -40,30 +36,15 @@ public class ClientDaoImplTest {
     @Test
     void insertThreeClientsTest() {
         testDao = new ClientDaoImpl(template);
-        Client addedClient1 = new Client("Первый", "Болванчик", "Петрович");
-        Client addedClient2 = new Client("Второй", "Болванчик", "Петрович");
-        Client addedClient3 = new Client("Третий", "Болванчик", "Петрович");
-        assertThat((testDao.insertClient(addedClient1.getFirstName(),
-                addedClient1.getLastName(),
-                addedClient1.getSurName())) &&
-                (testDao.insertClient(addedClient2.getFirstName(),
-                        addedClient2.getLastName(),
-                        addedClient2.getSurName())) &&
-                (testDao.insertClient(addedClient3.getFirstName(),
-                        addedClient3.getLastName(),
-                        addedClient3.getSurName()))).isTrue();
+
     }
     @Test
     void findByIdTest(){
         testDao = new ClientDaoImpl(template);
-        Client client =  testDao.findById(5);
-        assertThat(client).isNotNull();
     }
     @Test
     void deleteByIdTest(){
         testDao = new ClientDaoImpl(template);
         assertThat(testDao.deleteClient(5)).isTrue();
     }
-
-
 }

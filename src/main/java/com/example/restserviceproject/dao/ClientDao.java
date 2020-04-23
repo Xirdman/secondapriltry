@@ -3,17 +3,16 @@ package com.example.restserviceproject.dao;
 import com.example.restserviceproject.entity.Client;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ClientDao {
     List<Client> findAll();
 
-    Boolean insertClient(String fName, String lName, String sName);
+    int insertClient(String fName, String lName, String sName);
 
-    Boolean updateClient(Client client);
+    Boolean updateClient(int id,String fName, String lName, String sName);
 
     Boolean deleteClient(int id);
 
-    Client findById(int id);
-
-
+    Optional<Client> findByID(int id);
 }

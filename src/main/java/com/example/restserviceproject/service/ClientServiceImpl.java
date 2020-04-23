@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
-    //@Resource
     ClientDao clientDao;
 
     public ClientServiceImpl(@Autowired ClientDao clientDao) {
@@ -27,14 +27,19 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean updateClient(Client client) {
-        return clientDao.updateClient(client);
+    public Boolean updateClient(int id,String fName, String lName, String sName) {
+        return clientDao.updateClient(id,fName, lName,sName);
 
     }
 
     @Override
     public Boolean deleteClient(int id) {
         return clientDao.deleteClient(id);
+    }
+
+    @Override
+    public Optional<Client> findById(int id) {
+        return clientDao.findByID(id);
     }
 
 }
