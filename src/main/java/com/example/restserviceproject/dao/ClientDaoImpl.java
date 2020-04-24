@@ -68,7 +68,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public Boolean updateClient(int id,String fName, String lName, String sName) {
+    public Boolean updateClient(int id, String fName, String lName, String sName) {
         final String sql = "UPDATE clients SET" +
                 " firstname=:firstname," +
                 " lastname=:lastname," +
