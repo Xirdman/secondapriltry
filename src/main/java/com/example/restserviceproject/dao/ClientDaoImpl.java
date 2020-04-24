@@ -36,12 +36,12 @@ public class ClientDaoImpl implements ClientDao {
                 .addValue("lastname", lName)
                 .addValue("surname", sName);
         template.execute(sql, param, preparedStatement -> preparedStatement.execute());
-        final String sqlToFindId = "SELECT * FROM clients WHERE" +
-                "firstname =: firstname," +
-                "lastname =: lastname," +
-                "surname =: surname";
-        //параметры те же, поэтому мапу использую старую
-        Client client = template.queryForObject(sqlToFindId, param, new ClientRowMapper());
+        final String sqlToFindId = "SELECT * FROM clients WHERE firstname=:firstname AND lastname=:lastname AND surname=:surname";
+        SqlParameterSource param2 = new MapSqlParameterSource()
+                .addValue("firstname", fName)
+                .addValue("lastname", lName)
+                .addValue("surname", sName);
+        Client client = template.queryForObject(sqlToFindId, param2, new ClientRowMapper());
         return client.getId();
     }
 

@@ -1,7 +1,6 @@
 package com.example.restserviceproject.controller;
 
 import com.example.restserviceproject.entity.Client;
-import com.example.restserviceproject.entity.ClientDto;
 import com.example.restserviceproject.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -39,8 +38,8 @@ public class ClientController {
     }
 
     @PutMapping("/update")
-    public void updateClient(@RequestParam(value = "clientDto") ClientDto clientDto){
-        if( !clientService.updateClient(clientDto.getId(),clientDto.getFirstName(),clientDto.getLastName(),clientDto.getSurName())){
+    public void updateClient(@RequestParam(value = "client") Client client){
+        if( !clientService.updateClient(client.getId(),client.getFirstName(),client.getLastName(),client.getSurName())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Клиент не найден");
         }
     }
