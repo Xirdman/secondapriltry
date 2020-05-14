@@ -53,4 +53,8 @@ public class Client {
         this.surName = surName;
     }
 
+    public ClientDto toDto(){
+        return new ClientDto(this.id,this.firstName,this.lastName,this.surName);
+    }
+
 }

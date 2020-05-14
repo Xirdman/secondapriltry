@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ClientService {
     List<Client> findAll();
 
-    void insertClient(String fName, String lName, String sName);
+    int insertClient(String fName, String lName, String sName);
 
     Boolean updateClient(int id,String fName, String lName, String sName);
 

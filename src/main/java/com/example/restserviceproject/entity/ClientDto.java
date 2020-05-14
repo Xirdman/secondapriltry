@@ -8,6 +8,7 @@ public class ClientDto {
         return id;
     }
 
+
     public String getFirstName() {
         return firstName;
     }
@@ -18,5 +19,12 @@ public class ClientDto {
 
     public String getSurName() {
         return surName;
+    }
+
+    public ClientDto(int id, String firstName, String lastName, String surName) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.surName = surName;
     }
 }

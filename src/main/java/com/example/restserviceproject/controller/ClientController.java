@@ -1,6 +1,7 @@
 package com.example.restserviceproject.controller;
 
 import com.example.restserviceproject.entity.Client;
+import com.example.restserviceproject.entity.ClientDto;
 import com.example.restserviceproject.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,31 +29,29 @@ public class ClientController {
     @DeleteMapping("/delete/{clientId}")
     public void deleteClient(@PathVariable int clientId) {
         if (!clientService.deleteClient(clientId)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Client didnt finded");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Client not found");
         }
     }
 
     @PutMapping("/add")
-    public void addClient(@RequestParam(value = "client") Client client) {
-        clientService.insertClient(client.getFirstName(), client.getLastName(), client.getSurName());
+    public int addClient(@RequestParam(value = "client") ClientDto client) {
+        return clientService.insertClient(client.getFirstName(), client.getLastName(), client.getSurName());
     }
 
     @PutMapping("/update")
-    public void updateClient(@RequestParam(value = "client") Client client){
-        if( !clientService.updateClient(client.getId(),client.getFirstName(),client.getLastName(),client.getSurName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Клиент не найден");
+    public void updateClient(@RequestParam(value = "client") ClientDto client) {
+        if (!clientService.updateClient(client.getId(), client.getFirstName(), client.getLastName(), client.getSurName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Client not found");
         }
     }
 
-    @GetMapping ("/get/{id}")
-    public Client getById(@PathVariable int id){
+    @GetMapping("/get/{id}")
+    public ClientDto getById(@PathVariable int id) {
         Optional<Client> clientOptional = clientService.findById(id);
-        if(clientOptional.isPresent()){
-            return clientOptional.get();
+        try {
+            return clientOptional.map(Client::toDto).orElseThrow(() -> new Exception("Client didnt found"));
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Client not found");
         }
-        else{
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Client dont find");
-        }
-
     }
 }

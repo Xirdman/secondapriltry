@@ -22,8 +22,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void insertClient(String fName, String lName, String sName) {
-        clientDao.insertClient(fName, lName, sName);
+    public int insertClient(String fName, String lName, String sName) {
+        return clientDao.insertClient(fName, lName, sName);
     }
 
     @Override

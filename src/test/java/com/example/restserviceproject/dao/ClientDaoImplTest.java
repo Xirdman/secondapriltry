@@ -1,20 +1,25 @@
 package com.example.restserviceproject.dao;
 
 import com.example.restserviceproject.entity.Client;
+import com.example.restserviceproject.mapper.ClientRowMapper;
+import org.hamcrest.MatcherAssert;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
 
-//У меня не запускаются тесты с аннотацией DataJdbcTest, пишет не находит контекст,
-// хотя выше по пкаеты в SecondapriltryApplicationTests есть аннотация Spring boot test
-// и спринг мог бы инициализировать контекст там
+import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @TestPropertySource("/applicationtest.properties")
 public class ClientDaoImplTest {
@@ -24,14 +29,6 @@ public class ClientDaoImplTest {
     @Autowired
     ClientDaoImpl testDao;
 
-    /*
-    Пока не придумал им применения
-    @BeforeAll
-    static void beforeTests(){
-    }
-    @AfterAll
-    static void afterTests(){
-    }*/
     @BeforeEach
     void beforeEach() {
         template.execute("DELETE FROM clients", preparedStatement -> preparedStatement.execute());
@@ -61,6 +58,17 @@ public class ClientDaoImplTest {
     void deleteByIdTest() {
         int i = testDao.insertClient("deleteTestFName", "deleteLastName", "deleteSurName");
         Assert.isTrue(testDao.deleteClient(i), "");
+        final String sql = "SELECT * FROM clients WHERE firstname=:fName AND lastname=:lName AND surname=:sName";
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("fName", "deleteTestFName")
+                .addValue("lName", "deleteLastName")
+                .addValue("sName", "deleteSurName");
+        Client client = null;
+        try {
+            client = template.queryForObject(sql, parameterSource, new ClientRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+        }
+        assertNull(client);
     }
 
     @Test
@@ -71,14 +79,13 @@ public class ClientDaoImplTest {
                 testClient.getSurName());
         Optional<Client> cl = testDao.findByID(id);
         Client findByIdTestClient = null;
+        assertTrue(cl.isPresent(), "optional пустой");
         if (cl.isPresent()) {
             findByIdTestClient = cl.get();
-        } else {
-            Assert.isTrue(false, "Optional пустой");
         }
-        Assert.isTrue(testClient.getFirstName().equals(findByIdTestClient.getFirstName()), "Имена не равны в добавленном клиенте");
-        Assert.isTrue(testClient.getLastName().equals(findByIdTestClient.getLastName()), "не равны " + testClient.getLastName() + " " + findByIdTestClient.getLastName());
-        Assert.isTrue(testClient.getSurName().equals(findByIdTestClient.getSurName()), "Отчества не равны в добавленном клиенте");
+        MatcherAssert.assertThat(findByIdTestClient.getFirstName(), Matchers.is(testClient.getFirstName()));
+        MatcherAssert.assertThat(findByIdTestClient.getLastName(), Matchers.is(testClient.getLastName()));
+        MatcherAssert.assertThat(findByIdTestClient.getSurName(), Matchers.is(testClient.getSurName()));
 
         testClient.setFirstName("ОбновленноеИмя");
         testClient.setLastName("ОбновленнаяФамилия");
@@ -87,21 +94,20 @@ public class ClientDaoImplTest {
         testDao.updateClient(id, testClient.getFirstName(), testClient.getLastName(), testClient.getSurName());
         Optional<Client> cl2 = testDao.findByID(id);
         Client updateTestClient = null;
+        assertTrue(cl2.isPresent(), "optional пустой");
         if (cl2.isPresent()) {
             updateTestClient = cl2.get();
-        } else {
-            Assert.isTrue(false, "Optional пустой");
         }
+        MatcherAssert.assertThat(updateTestClient.getFirstName(), Matchers.is(testClient.getFirstName()));
+        MatcherAssert.assertThat(updateTestClient.getLastName(), Matchers.is(testClient.getLastName()));
+        MatcherAssert.assertThat(updateTestClient.getSurName(), Matchers.is(testClient.getSurName()));
 
-        Assert.isTrue(testClient.getFirstName().equals(updateTestClient.getFirstName()), "Имена не равны в обновленом клиенте");
-        Assert.isTrue(testClient.getLastName().equals(updateTestClient.getLastName()), "Фамилии не равны в обновленом клиенте");
-        Assert.isTrue(testClient.getSurName().equals(updateTestClient.getSurName()), "Отчества не равны в обновленом клиенте");
-
-        Assert.isTrue(testDao.deleteClient(id), "Удаление не прошло");
+        assertTrue(testDao.deleteClient(id), "Удаление не прошло");
 
         testDao.insertClient("1", "1", "1");
         testDao.insertClient("2", "2", "2");
         List<Client> list = testDao.findAll();
         Assert.noNullElements(list, "Пустые элементы");
+        assertEquals(list.size(),2);
     }
 }

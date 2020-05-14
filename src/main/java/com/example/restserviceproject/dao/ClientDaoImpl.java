@@ -7,6 +7,8 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -30,19 +32,16 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public int insertClient(String fName, String lName, String sName) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        String[] array = new String[1];
+        array[0]= "id";
         final String sql = "INSERT INTO clients (firstname,lastname,surname) VALUES (:firstname,:lastname,:surname)";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("firstname", fName)
                 .addValue("lastname", lName)
                 .addValue("surname", sName);
-        template.execute(sql, param, preparedStatement -> preparedStatement.execute());
-        final String sqlToFindId = "SELECT * FROM clients WHERE firstname=:firstname AND lastname=:lastname AND surname=:surname";
-        SqlParameterSource param2 = new MapSqlParameterSource()
-                .addValue("firstname", fName)
-                .addValue("lastname", lName)
-                .addValue("surname", sName);
-        Client client = template.queryForObject(sqlToFindId, param2, new ClientRowMapper());
-        return client.getId();
+        template.update(sql,param, keyHolder,array);
+        return (int)keyHolder.getKey();
     }
 
     @Override
@@ -60,9 +59,7 @@ public class ClientDaoImpl implements ClientDao {
         Client client = null;
         try {
             client = template.queryForObject(sql, param, new ClientRowMapper());
-            //return Optional.ofNullable(client);
         } catch (EmptyResultDataAccessException e) {
-            //return Optional.empty();
         }
         return Optional.ofNullable(client);
     }
