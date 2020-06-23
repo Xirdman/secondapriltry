@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
-    ClientDao clientDao;
+    private ClientDao clientDao;
 
     public ClientServiceImpl(@Autowired ClientDao clientDao) {
         this.clientDao = clientDao;

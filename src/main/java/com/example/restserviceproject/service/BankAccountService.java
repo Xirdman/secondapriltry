@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BankAccountService {
-    List<BankAccount> findAll();
+    Optional<List<BankAccount>> findAll();
 
-    int InsertBankAccount(int ownerId, String accountNumber, double value);
+    int insertBankAccount(int ownerId, String accountNumber, double value);
 
-    boolean updateBankAccount(int ownerId, String accountNumber, double value);
+    boolean updateBankAccount(int ownerId, String accountNumber, double value,int id);
 
-    boolean deleteBankAccount();
+    boolean deleteBankAccount(int id);
 
     Optional<BankAccount> findById(int id);
 }

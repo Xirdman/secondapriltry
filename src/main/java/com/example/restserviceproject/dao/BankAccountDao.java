@@ -8,11 +8,11 @@ import java.util.Optional;
 public interface BankAccountDao {
     Optional<List<BankAccount>> findAll();
 
-    boolean updateBankAccount(BankAccount bankAcc);
+    boolean updateBankAccount(int ownerId, String accountNumber, double value,int id);
 
-    boolean deleteBankAccount(BankAccount bankAcc);
+    boolean deleteBankAccount(int id);
 
-    int insertBankAccount(BankAccount bankAcc);
+    int insertBankAccount(int ownerId, String accountNumber, double value);
 
     Optional<BankAccount> findById(int id);
 
