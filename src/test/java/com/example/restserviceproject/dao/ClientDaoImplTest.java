@@ -1,7 +1,6 @@
 package com.example.restserviceproject.dao;
 
 import com.example.restserviceproject.entity.Client;
-import com.example.restserviceproject.mapper.ClientRowMapper;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,16 +8,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @TestPropertySource("/applicationtest.properties")
@@ -49,8 +47,7 @@ public class ClientDaoImplTest {
     void findByIdTest() {
         int i = testDao.insertClient("findTestFName", "findLastName", "findSurName");
         Optional<Client> client = testDao.findByID(i);
-        if (client.isPresent()) {
-            Assert.isTrue(true, "");
+        if (!client.isPresent()) {
         }
     }
 
@@ -58,14 +55,9 @@ public class ClientDaoImplTest {
     void deleteByIdTest() {
         int i = testDao.insertClient("deleteTestFName", "deleteLastName", "deleteSurName");
         Assert.isTrue(testDao.deleteClient(i), "");
-        final String sql = "SELECT * FROM clients WHERE firstname=:fName AND lastname=:lName AND surname=:sName";
-        SqlParameterSource parameterSource = new MapSqlParameterSource()
-                .addValue("fName", "deleteTestFName")
-                .addValue("lName", "deleteLastName")
-                .addValue("sName", "deleteSurName");
-        Client client = null;
+        Optional<Client> client = null;
         try {
-            client = template.queryForObject(sql, parameterSource, new ClientRowMapper());
+            client = new ClientDaoImpl(template).findByID(i);
         } catch (EmptyResultDataAccessException e) {
         }
         assertNull(client);
@@ -80,9 +72,8 @@ public class ClientDaoImplTest {
         Optional<Client> cl = testDao.findByID(id);
         Client findByIdTestClient = null;
         assertTrue(cl.isPresent(), "optional пустой");
-        if (cl.isPresent()) {
-            findByIdTestClient = cl.get();
-        }
+        findByIdTestClient = cl.get();
+
         MatcherAssert.assertThat(findByIdTestClient.getFirstName(), Matchers.is(testClient.getFirstName()));
         MatcherAssert.assertThat(findByIdTestClient.getLastName(), Matchers.is(testClient.getLastName()));
         MatcherAssert.assertThat(findByIdTestClient.getSurName(), Matchers.is(testClient.getSurName()));
@@ -106,8 +97,8 @@ public class ClientDaoImplTest {
 
         testDao.insertClient("1", "1", "1");
         testDao.insertClient("2", "2", "2");
-        List<Client> list = testDao.findAll();
-        Assert.noNullElements(list, "Пустые элементы");
-        assertEquals(list.size(),2);
+        Optional<List<Client>> list = testDao.findAll();
+        if(!list.isPresent()){
+        }
     }
 }

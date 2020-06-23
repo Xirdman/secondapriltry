@@ -2,6 +2,7 @@ package com.example.restserviceproject.controller;
 
 import com.example.restserviceproject.entity.Client;
 import com.example.restserviceproject.entity.ClientDto;
+import com.example.restserviceproject.entity.ListDto;
 import com.example.restserviceproject.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,8 +23,9 @@ public class ClientController {
     }
 
     @GetMapping("/get")
-    public List<Client> getClients() {
-        return clientService.findAll();
+    public List<ClientDto> getClients() throws Exception {
+        Optional<List<Client>> clients= clientService.findAll();
+        return clients.map(ListDto::toDto).orElseThrow(()->new Exception("Clients not founded"));
     }
 
     @DeleteMapping("/delete/{clientId}")
@@ -46,12 +48,8 @@ public class ClientController {
     }
 
     @GetMapping("/get/{id}")
-    public ClientDto getById(@PathVariable int id) {
+    public ClientDto getById(@PathVariable int id) throws Exception {
         Optional<Client> clientOptional = clientService.findById(id);
-        try {
-            return clientOptional.map(Client::toDto).orElseThrow(() -> new Exception("Client didnt found"));
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Client not found");
-        }
+        return clientOptional.map(ClientDto::toDto).orElseThrow(() -> new Exception("Client didnt found"));
     }
 }

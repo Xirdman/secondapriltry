@@ -21,10 +21,14 @@ public class ClientDto {
         return surName;
     }
 
+
     public ClientDto(int id, String firstName, String lastName, String surName) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.surName = surName;
+    }
+    public static ClientDto toDto(Client client){
+        return new ClientDto(client.getId(),client.getFirstName(),client.getLastName(),client.getSurName());
     }
 }

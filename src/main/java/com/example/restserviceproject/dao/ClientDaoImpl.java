@@ -11,10 +11,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Repository
 public class ClientDaoImpl implements ClientDao {
@@ -26,22 +23,25 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<Client> findAll() {
-        return template.query("select * from clients", new ClientRowMapper());
+    public Optional<List<Client>> findAll() {
+        List<Client> result = null;
+        try {
+            result = template.query("select * from clients", new ClientRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+        }
+        return Optional.ofNullable(result);
     }
 
     @Override
     public int insertClient(String fName, String lName, String sName) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String[] array = new String[1];
-        array[0]= "id";
         final String sql = "INSERT INTO clients (firstname,lastname,surname) VALUES (:firstname,:lastname,:surname)";
         SqlParameterSource param = new MapSqlParameterSource()
                 .addValue("firstname", fName)
                 .addValue("lastname", lName)
                 .addValue("surname", sName);
-        template.update(sql,param, keyHolder,array);
-        return (int)keyHolder.getKey();
+        template.update(sql, param, keyHolder);
+        return (int) keyHolder.getKey();
     }
 
     @Override

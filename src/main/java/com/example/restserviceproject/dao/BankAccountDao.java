@@ -3,15 +3,17 @@ package com.example.restserviceproject.dao;
 import com.example.restserviceproject.entity.BankAccount;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BankAccountDao {
-    List<BankAccount> findAll();
+    Optional<List<BankAccount>> findAll();
 
-    void updateBankAccount(BankAccount bankAcc);
+    boolean updateBankAccount(BankAccount bankAcc);
 
-    void deleteBankAccount(BankAccount bankAcc);
+    boolean deleteBankAccount(BankAccount bankAcc);
 
-    void insertBankAccount(BankAccount bankAcc);
+    int insertBankAccount(BankAccount bankAcc);
 
-    void executeUpdateBankAccount(BankAccount bankAcc);
+    Optional<BankAccount> findById(int id);
+
 }

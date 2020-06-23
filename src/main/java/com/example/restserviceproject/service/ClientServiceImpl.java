@@ -17,7 +17,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<Client> findAll() {
+    public Optional<List<Client>> findAll() {
         return clientDao.findAll();
     }
 
@@ -27,8 +27,8 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Boolean updateClient(int id,String fName, String lName, String sName) {
-        return clientDao.updateClient(id,fName, lName,sName);
+    public Boolean updateClient(int id, String fName, String lName, String sName) {
+        return clientDao.updateClient(id, fName, lName, sName);
 
     }
 
