@@ -1,11 +1,8 @@
 package com.example.restserviceproject.entity;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class Client {
     private int id;
-    private String firstName,lastName,surName;
+    private String firstName, lastName, surName;
 
     public int getId() {
         return id;

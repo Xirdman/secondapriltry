@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class BankAccountRowMapper implements RowMapper<BankAccount> {
     @Override
     public BankAccount mapRow(ResultSet resultSet, int i) throws SQLException {
-        BankAccount bankAccount=new BankAccount();
+        BankAccount bankAccount = new BankAccount();
         bankAccount.setId(resultSet.getInt("id"));
         bankAccount.setOwnerId(resultSet.getInt("ownerid"));
         bankAccount.setAccountNumber(resultSet.getString("accountnumber"));

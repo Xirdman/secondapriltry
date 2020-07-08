@@ -1,8 +1,5 @@
 package com.example.restserviceproject.entity;
 
-import org.springframework.stereotype.Component;
-
-@Component
 public class BankAccount {
     private int id, ownerId;
     private String accountNumber;
